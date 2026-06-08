@@ -1,0 +1,8 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Hardware/Hardware.csproj" />
+  <Project Path="SoftwareMachine/SoftwareMachine.csproj" />
+  <Project Path="TestMachineACafe/MachineACafe.Test.csproj" />
+</Solution>

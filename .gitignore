@@ -6,3 +6,10 @@
 /obj
 
 TestMachineACafe/obj/
+TestMachineACafe/bin/
+
+Hardware/bin/
+Hardware/obj/
+
+SoftwareMachine/bin/
+SoftwareMachine/obj/

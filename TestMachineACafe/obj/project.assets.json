@@ -615,6 +615,55 @@
           "build/netcoreapp3.1/NUnit3TestAdapter.props": {},
           "build/netcoreapp3.1/NUnit3TestAdapter.targets": {}
         }
+      },
+      "xunit.abstractions/2.0.3": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/xunit.abstractions.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/xunit.abstractions.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "xunit.extensibility.core/2.9.3": {
+        "type": "package",
+        "dependencies": {
+          "xunit.abstractions": "2.0.3"
+        },
+        "compile": {
+          "lib/netstandard1.1/xunit.core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard1.1/xunit.core.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Hardware/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/Hardware.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Hardware.dll": {}
+        }
+      },
+      "SoftwareMachine/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "compile": {
+          "bin/placeholder/SoftwareMachine.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/SoftwareMachine.dll": {}
+        }
       }
     }
   },
@@ -1504,15 +1553,65 @@
         "nunit3testadapter.nuspec",
         "nunit_256.png"
       ]
+    },
+    "xunit.abstractions/2.0.3": {
+      "sha512": "pot1I4YOxlWjIb5jmwvvQNbTrZ3lJQ+jUGkGjWE3hEFM0l5gOnBWS+H3qsex68s5cO52g+44vpGzhAt+42vwKg==",
+      "type": "package",
+      "path": "xunit.abstractions/2.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net35/xunit.abstractions.dll",
+        "lib/net35/xunit.abstractions.xml",
+        "lib/netstandard1.0/xunit.abstractions.dll",
+        "lib/netstandard1.0/xunit.abstractions.xml",
+        "lib/netstandard2.0/xunit.abstractions.dll",
+        "lib/netstandard2.0/xunit.abstractions.xml",
+        "xunit.abstractions.2.0.3.nupkg.sha512",
+        "xunit.abstractions.nuspec"
+      ]
+    },
+    "xunit.extensibility.core/2.9.3": {
+      "sha512": "kf3si0YTn2a8J8eZNb+zFpwfoyvIrQ7ivNk5ZYA5yuYk1bEtMe4DxJ2CF/qsRgmEnDr7MnW1mxylBaHTZ4qErA==",
+      "type": "package",
+      "path": "xunit.extensibility.core/2.9.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "_content/README.md",
+        "_content/logo-128-transparent.png",
+        "lib/net452/xunit.core.dll",
+        "lib/net452/xunit.core.dll.tdnet",
+        "lib/net452/xunit.core.xml",
+        "lib/net452/xunit.runner.tdnet.dll",
+        "lib/net452/xunit.runner.utility.net452.dll",
+        "lib/netstandard1.1/xunit.core.dll",
+        "lib/netstandard1.1/xunit.core.xml",
+        "xunit.extensibility.core.2.9.3.nupkg.sha512",
+        "xunit.extensibility.core.nuspec"
+      ]
+    },
+    "Hardware/1.0.0": {
+      "type": "project",
+      "path": "../Hardware/Hardware.csproj",
+      "msbuildProject": "../Hardware/Hardware.csproj"
+    },
+    "SoftwareMachine/1.0.0": {
+      "type": "project",
+      "path": "../SoftwareMachine/SoftwareMachine.csproj",
+      "msbuildProject": "../SoftwareMachine/SoftwareMachine.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net10.0": [
+      "Hardware >= 1.0.0",
       "Microsoft.NET.Test.Sdk >= 17.14.0",
       "NUnit >= 4.3.2",
       "NUnit.Analyzers >= 4.7.0",
       "NUnit3TestAdapter >= 5.0.0",
-      "coverlet.collector >= 6.0.4"
+      "SoftwareMachine >= 1.0.0",
+      "coverlet.collector >= 6.0.4",
+      "xunit.extensibility.core >= 2.9.3"
     ]
   },
   "packageFolders": {
@@ -1547,7 +1646,14 @@
         "net10.0": {
           "framework": "net10.0",
           "targetAlias": "net10.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\auror\\Dev\\MachineACafe\\Hardware\\Hardware.csproj": {
+              "projectPath": "C:\\Users\\auror\\Dev\\MachineACafe\\Hardware\\Hardware.csproj"
+            },
+            "C:\\Users\\auror\\Dev\\MachineACafe\\SoftwareMachine\\SoftwareMachine.csproj": {
+              "projectPath": "C:\\Users\\auror\\Dev\\MachineACafe\\SoftwareMachine\\SoftwareMachine.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -1586,6 +1692,10 @@
           "coverlet.collector": {
             "target": "Package",
             "version": "[6.0.4, )"
+          },
+          "xunit.extensibility.core": {
+            "target": "Package",
+            "version": "[2.9.3, )"
           }
         },
         "imports": [

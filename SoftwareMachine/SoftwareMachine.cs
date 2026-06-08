@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SoftwareMachine
+﻿namespace SoftwareMachine
 {
     public class SoftwareMachineClass
     {

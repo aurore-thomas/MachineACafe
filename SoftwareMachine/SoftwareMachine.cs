@@ -12,6 +12,10 @@ namespace SoftwareMachine
             SommeEncaisseEnCentimes += 40;
         }
 
+        public ushort NombreCafeServi { get; private set; }
+        public ushort SommeEncaisseEnCentimes { get; private set; }
+
+
         //public void InsérerPiece(ushort montantEnCents, ushort montantInsere)
         //{
         //    NombreCafeServi++;
@@ -31,8 +35,6 @@ namespace SoftwareMachine
         //    return Enum.IsDefined(typeof(CoinCode), (int)montantEnCents);
         //}
 
-        public ushort NombreCafeServi { get; private set; }
-        public ushort SommeEncaisseEnCentimes { get; private set; }
         //public ushort SurplusMonnaie { get; private set; }
 
 

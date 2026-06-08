@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "mQPKeqFUL/Y=",
+  "dgSpecHash": "Kx6Uy0AOihI=",
   "success": true,
-  "projectFilePath": "C:\\Users\\auror\\Dev\\MachineACafe\\TestMachineACafe\\TestMachineACafe.csproj",
+  "projectFilePath": "C:\\Users\\auror\\Dev\\MachineACafe\\TestMachineACafe\\MachineACafe.Test.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\auror\\.nuget\\packages\\coverlet.collector\\6.0.4\\coverlet.collector.6.0.4.nupkg.sha512",
     "C:\\Users\\auror\\.nuget\\packages\\microsoft.applicationinsights\\2.22.0\\microsoft.applicationinsights.2.22.0.nupkg.sha512",

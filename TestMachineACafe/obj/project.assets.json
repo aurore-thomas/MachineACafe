@@ -1522,9 +1522,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\auror\\Dev\\MachineACafe\\TestMachineACafe\\TestMachineACafe.csproj",
-      "projectName": "TestMachineACafe",
-      "projectPath": "C:\\Users\\auror\\Dev\\MachineACafe\\TestMachineACafe\\TestMachineACafe.csproj",
+      "projectUniqueName": "C:\\Users\\auror\\Dev\\MachineACafe\\TestMachineACafe\\MachineACafe.Test.csproj",
+      "projectName": "MachineACafe.Test",
+      "projectPath": "C:\\Users\\auror\\Dev\\MachineACafe\\TestMachineACafe\\MachineACafe.Test.csproj",
       "packagesPath": "C:\\Users\\auror\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\auror\\Dev\\MachineACafe\\TestMachineACafe\\obj\\",
       "projectStyle": "PackageReference",

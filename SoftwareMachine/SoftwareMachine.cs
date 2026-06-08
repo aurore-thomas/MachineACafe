@@ -4,10 +4,18 @@ namespace SoftwareMachine
 {
     public class SoftwareMachineClass
     {
-        public void InsérerPiece(ushort montantEnCents)
+        public void InsérerPiece(ushort montantEnCents, ushort montantInsere)
         {
             NombreCafeServi++;
-            SommeEncaisseEnCentimes += 40;
+            SommeEncaisseEnCentimes += montantEnCents;
+            SurplusMonnaie = (ushort)(montantInsere - montantEnCents);
+        }
+
+        public void AnnulerCommande(ushort montantCafe, ushort montantInsere)
+        {
+            NombreCafeServi --;
+            SommeEncaisseEnCentimes -= montantCafe;
+            SurplusMonnaie = montantInsere;
         }
 
         public bool VerifierPiece(ushort montantEnCents)
@@ -17,6 +25,8 @@ namespace SoftwareMachine
 
         public ushort NombreCafeServi { get; private set; }
         public ushort SommeEncaisseEnCentimes { get; private set; }
+        public ushort SurplusMonnaie { get; private set; }
+
 
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace SoftwareMachine
+﻿using Hardware;
+
+namespace SoftwareMachine
 {
     public class SoftwareMachineClass
     {
@@ -6,6 +8,11 @@
         {
             NombreCafeServi++;
             SommeEncaisseEnCentimes += 40;
+        }
+
+        public bool VerifierPiece(ushort montantEnCents)
+        {
+            return Enum.IsDefined(typeof(CoinCode), (int)montantEnCents);
         }
 
         public ushort NombreCafeServi { get; private set; }

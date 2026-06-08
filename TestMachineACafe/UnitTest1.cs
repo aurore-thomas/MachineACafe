@@ -44,5 +44,23 @@ namespace TestMachineACafe
             Assert.Equal(prixCafeEnCours * 2, machineACafe.SommeEncaisseEnCentimes);
 
         }
+
+
+        [Fact(DisplayName = "Quand on insert la piece, celle-ci est reconnu par la machine")]
+        public void VerifyPiece()
+        {
+
+            // Etant donne une machine a cafe 
+            SoftwareMachineClass machineAcafe = new SoftwareMachineClass();
+
+            // Quand il detecte la piece
+            bool piece20 = machineAcafe.VerifierPiece(20);
+            bool piece1 = machineAcafe.VerifierPiece(1);
+
+            // il accepte les pieces de 20 centimes
+            Assert.Equal(piece20, true);
+            // il accepte pas les pieces de 1 centime
+            Assert.Equal(piece1, false);
+        }
     }
 }

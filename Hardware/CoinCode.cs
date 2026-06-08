@@ -6,8 +6,6 @@
 /// </summary>
 public enum CoinCode
 {
-    OneCent = 1,
-    TwoCents = 2,
     FiveCents = 5,
     TenCents = 10,
     TwentyCents = 20,

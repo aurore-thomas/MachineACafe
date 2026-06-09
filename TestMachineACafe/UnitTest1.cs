@@ -1,107 +1,152 @@
-﻿using SoftwareMachine;
+﻿using Hardware;
+using MachineACafe.Test.Utilitaires;
+using SoftwareMachine;
 using Xunit;
 using Assert = Xunit.Assert;
 
-namespace TestMachineACafe
+namespace TestMachineACafe;
+
+public class Tests
 {
-    public class Tests
+    [Fact(DisplayName = "Quand la bonne somme est insérée, un café est servi")]
+    public void CasNominal()
     {
-        [Fact(DisplayName = "Quand la bonne somme est insérée, un café est servi")]
-        public void CasNominal()
-        {
-            const ushort prixCafeEnCours = 40;
+        // Etant donné une machine à café
+        var brewer = new BrewerSpy(new BrewerStub());
+        var changeMachine = new ChangeMachineSpy(new ChangeMachineStub());
+        var machineACafe = new SoftwareMachineBuilder()
+            .AyantUneChangeMachine(changeMachine)
+            .AyantUnBrewer(brewer)
+            .Build();
 
-            // Etant donné une machine à café
-            var machineACafe = new SoftwareMachineClass();
+        var nbCafesInitiaux = brewer.MakeACoffeInvocations;
 
-            // Quand le hardware signale une somme suffisante pour le prix d'un café
-            machineACafe.InsérerPiece(prixCafeEnCours);
+        // Quand le hardware signale une somme suffisante pour le prix d'un café
+        machineACafe.InsererPiece(SoftwareMachineClass.PrixDuCafeEnCentimes);
 
-            // ALORS le hardware est sollicité pour faire couler un café
-            Assert.Equal(1, machineACafe.NombreCafeServi);
+        // ALORS MakeACoffee est appelé 1 fois 
+        Assert.Equal(nbCafesInitiaux + 1, brewer.MakeACoffeInvocations);
 
-            // ET il est demandé au hardware de collecter les fonds
-            Assert.Equal(prixCafeEnCours, machineACafe.SommeEncaisseEnCentimes);
+        // ET CollectStoredMoney est appelé 1 fois 
+        Assert.Equal(SoftwareMachineClass.PrixDuCafeEnCentimes, changeMachine.CollectStoredMoneyInvocations);
 
-        }
+        // ET FlushStoredMoney n'est pas appelé 
+        Assert.Equal(0, changeMachine.FlushStoredMoneyInvocations);
 
-        [Fact(DisplayName = "Quand la bonne somme est insérée 2 fois, deux café sont servis")]
-        public void Cas2Cafes()
-        {
-            const ushort prixCafeEnCours = 40;
-
-            // Etant donné une machine à café
-            var machineACafe = new SoftwareMachineClass();
-
-            // Quand le hardware signale une somme suffisante pour le prix de deux cafés
-            machineACafe.InsérerPiece(prixCafeEnCours);
-            machineACafe.InsérerPiece(prixCafeEnCours);
-
-            // ALORS le hardware est sollicité pour faire couler deux café
-            Assert.Equal(2, machineACafe.NombreCafeServi);
-
-            // ET il est demandé au hardware de collecter les fonds
-            Assert.Equal(prixCafeEnCours * 2, machineACafe.SommeEncaisseEnCentimes);
-
-        }
-
-        //[Fact(DisplayName = "Quand la somme insérée est supérieure au montant du café, le surplus est rendu")]
-        //public void CasTropDeMonnaie()
-        //{
-        //    const ushort prixCafeEnCours = 20;
-        //    const ushort montantInsere = 50;
-
-        //    // Etant donné une machine à café
-        //    var machineACafe = new SoftwareMachineClass();
-
-        //    // Quand le hardware signale une somme supérieure pour le prix d'un café
-        //    machineACafe.InsérerPiece(prixCafeEnCours, montantInsere);
-
-        //    // ALORS le hardware est sollicité pour rendre le surplus
-        //    Assert.Equal(30, machineACafe.SurplusMonnaie);
-
-        //    // ET il est demandé au hardware de servir un café
-        //    Assert.Equal(1, machineACafe.NombreCafeServi);
-
-        //    // ET il est demandé au hardware de collecter les fonds
-        //    Assert.Equal(prixCafeEnCours, machineACafe.SommeEncaisseEnCentimes);
-        //}
-
-        //[Fact(DisplayName = "Quand l'utilisateur annule sa commande après avoir inséré des pièces")]
-        //public void CasAnnulation()
-        //{
-        //    const ushort montantInseree = 80;
-
-        //    // Etant donné une machine à café
-        //    var machineACafe = new SoftwareMachineClass();
-
-        //    // Quand le hardware signale une annulation de commande après insertion de pièces
-        //    machineACafe.InsérerPiece(0, montantInseree);
-        //    machineACafe.AnnulerCommande(0, montantInseree);
-
-        //    // Alors le hardware est sollicité pour rendre la monnaie insérée
-        //    Assert.Equal(80, machineACafe.SurplusMonnaie);
-
-        //    // ET il est demandé au hardware de ne pas prendre en compte cette monnaie dans son total cumulé
-        //    Assert.Equal(0, machineACafe.SommeEncaisseEnCentimes);
-        //}
-
-
-        //[Fact(DisplayName = "Quand on insert la pièce, celle-ci est reconnue par la machine")]
-        //public void VerifyPiece()
-        //{
-
-        //    // Etant donne une machine a cafe 
-        //    SoftwareMachineClass machineAcafe = new SoftwareMachineClass();
-
-        //    // Quand il détecte la pièce
-        //    bool piece20 = machineAcafe.VerifierPiece(20);
-        //    bool piece1 = machineAcafe.VerifierPiece(1);
-
-        //    //alors  il accepte les pieces de 20 centimes
-        //    Assert.True(piece20);
-        //    //et il accepte pas les pieces de 1 centime
-        //    Assert.False(piece1);
-        //}
     }
+
+    [Fact(DisplayName = "Quand la bonne somme est insérée 2 fois, deux cafés sont servis")]
+    public void Cas2Cafes()
+    {
+        // Etant donné une machine à café
+        var brewer = new BrewerSpy(new BrewerStub());
+        var changeMachine = new ChangeMachineSpy(new ChangeMachineStub());
+        var machineACafe = new SoftwareMachineBuilder()
+            .AyantUneChangeMachine(changeMachine)
+            .AyantUnBrewer(brewer)
+            .Build();
+        var nbCafesInitiaux = machineACafe.NombreCafeServi;
+
+        // Quand le hardware signale une somme suffisante pour le prix de deux cafés
+        machineACafe.InsererPiece(SoftwareMachineClass.PrixDuCafeEnCentimes);
+        machineACafe.InsererPiece(SoftwareMachineClass.PrixDuCafeEnCentimes);
+
+        // ALORS MakeACoffee est appelé 2 fois 
+        Assert.Equal(nbCafesInitiaux + 2, brewer.MakeACoffeInvocations);
+
+        // ET CollectStoredMoney est appelé 1 fois 
+        Assert.Equal(SoftwareMachineClass.PrixDuCafeEnCentimes * 2, changeMachine.CollectStoredMoneyInvocations);
+
+        // ET FlushStoredMoney n'est pas appelé 
+        Assert.Equal(0, changeMachine.FlushStoredMoneyInvocations);
+    }
+
+    [Fact(DisplayName = "Quand trop d'argent est inséré, un café coule et l'argent est encaissé (le surplus n'est pas rendu)")]
+    public void CasTropArgent()
+    {
+        // Etant donné une machine à café
+        var brewer = new BrewerSpy(new BrewerStub());
+        var changeMachine = new ChangeMachineSpy(new ChangeMachineStub());
+        var machineACafe = new SoftwareMachineBuilder()
+            .AyantUneChangeMachine(changeMachine)
+            .AyantUnBrewer(brewer)
+            .Build();
+        var nbCafesInitiaux = machineACafe.NombreCafeServi;
+
+        // Quand le hardware signale une somme suffisante pour le prix de deux cafés
+        machineACafe.InsererPiece(SoftwareMachineClass.PrixDuCafeEnCentimes + 2);
+
+        // ALORS MakeACoffee est appelé 1 fois sur le hardware 
+        Assert.Equal(1, brewer.MakeACoffeInvocations);
+
+        // ET CollectStoredMoney est appelé 1 fois sur le hardware
+        Assert.Equal(SoftwareMachineClass.PrixDuCafeEnCentimes, changeMachine.CollectStoredMoneyInvocations);
+
+        // ET FlushStoredMoney n'est pas appelé 
+        Assert.Equal(0, changeMachine.FlushStoredMoneyInvocations);
+    }
+
+    [Fact(DisplayName = "Quand pas assez d'argent est inséré, le café ne coule pas et l'argent est rendu")]
+    public void CasPasAssezArgent()
+    {
+        // Etant donné une machine à café
+        var brewer = new BrewerSpy(new BrewerStub());
+        var changeMachine = new ChangeMachineSpy(new ChangeMachineStub());
+        var machineACafe = new SoftwareMachineBuilder()
+            .AyantUneChangeMachine(changeMachine)
+            .AyantUnBrewer(brewer)
+            .Build();
+
+        // Quand le hardware signale une somme suffisante pour le prix d'un café
+        machineACafe.InsererPiece(SoftwareMachineClass.PrixDuCafeEnCentimes - 1);
+
+        // ALORS MakeACoffee n'est pas appelé 
+        Assert.Equal(0, brewer.MakeACoffeInvocations);
+
+        // ET FlushStore est appelé 1 fois 
+        Assert.Equal(1, changeMachine.FlushStoredMoneyInvocations);
+
+        // ET CollectStoredMoney n'est pas appelé 
+        Assert.Equal(0, changeMachine.CollectStoredMoneyInvocations);
+    }
+
+    [Fact(DisplayName = "Quand aucune somme n'est insérée, aucun café n'est servi.")]
+    public void CasRien()
+    {
+        // ETANT DONNE une machine a café
+        var brewer = new BrewerSpy(new BrewerStub());
+        var changeMachine = new ChangeMachineSpy(new ChangeMachineStub());
+        var machineACafe = new SoftwareMachineBuilder()
+            .AyantUneChangeMachine(changeMachine)
+            .AyantUnBrewer(brewer)
+            .Build();
+
+        // Quand rien
+
+        // ALORS aucun café n'est servi
+        Assert.Equal(0, brewer.MakeACoffeInvocations);
+    }
+
+    [Fact(DisplayName = "Quand la machine à café est défaillante, celle-ci rend l'argent inséré")]
+    public void CasBrewerDefaillant()
+    {
+        // Etant donné une machine à café
+        var changeMachine = new ChangeMachineSpy(new ChangeMachineStub());
+
+        var machineACafe = new SoftwareMachineBuilder()
+            .AyantUnBrewerDefaillant()
+            .AyantUneChangeMachine(changeMachine)
+            .Build();
+        var nbCafesInitiaux = machineACafe.NombreCafeServi;
+
+        // Quand on insère 40 centimes 
+        machineACafe.InsererPiece(SoftwareMachineClass.PrixDuCafeEnCentimes);
+
+        // ET FlushStore est appelé 1 fois 
+        Assert.Equal(1, changeMachine.FlushStoredMoneyInvocations);
+
+        // ET CollectStoredMoney n'est pas appelé 
+        Assert.Equal(0, changeMachine.CollectStoredMoneyInvocations);
+    }
+
 }

@@ -4,12 +4,32 @@ namespace SoftwareMachine
 {
     public class SoftwareMachineClass
     {
-        public void InsérerPiece(ushort montantEnCents)
-        {
-            if (montantEnCents != 40) return;
+        public const ushort PrixDuCafeEnCentimes = 40;
 
-            NombreCafeServi++;
-            SommeEncaisseEnCentimes += 40;
+        private readonly IBrewer _brewer;
+        private readonly IChangeMachine _changeMachine;
+
+        public SoftwareMachineClass(IBrewer brewer, IChangeMachine changeMachine)
+        {
+            _brewer = brewer;
+            _changeMachine = changeMachine;
+        }
+
+        public void InsererPiece(ushort montantEnCents)
+        {
+            try
+            {
+                if (montantEnCents < PrixDuCafeEnCentimes) throw new Exception();
+
+                //NombreCafeServi++;
+                //SommeEncaisseEnCentimes += montantEnCents;
+
+                _brewer.MakeACoffee();
+                _changeMachine.CollectStoredMoney();
+            }
+            catch {
+                _changeMachine.FlushStoredMoney();
+            }
         }
 
         public ushort NombreCafeServi { get; private set; }

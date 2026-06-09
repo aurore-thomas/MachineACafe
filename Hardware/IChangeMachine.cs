@@ -1,4 +1,6 @@
-﻿namespace Hardware;
+﻿using System;
+
+namespace Hardware;
 
 public interface IChangeMachine
 {

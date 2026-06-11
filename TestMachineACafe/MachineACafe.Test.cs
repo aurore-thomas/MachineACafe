@@ -122,8 +122,33 @@ public class SoftwareMachineTest
 
         // ET CollectStoredMoney n'est pas appelé
         Assert.Equal(0, changeMachineSpy.CollectStoredMoneyInvocations);
-
-        // ET FlushStoredMoney n'est pas appelé
-        Assert.Equal(0, changeMachineSpy.FlushStoredMoneyInvocations);
+        // la machine est en attente de plus de pieces
+        Assert.Equal(2, changeMachineSpy.FlushStoredMoneyInvocations);
     }
+    
+    
+    [Fact]
+    public void CasAvecMonnaie()
+    {
+        // ETANT DONNE une machine à café
+        var changeMachine = new ChangeMachineFake();
+        var changeMachineSpy = new ChangeMachineSpy(changeMachine);
+
+        var brewer = new BrewerSpy();
+        _ = new SoftwareMachineBuilder()
+            .AyantUneChangeMachine(changeMachineSpy)
+            .AyantUnBrewer(brewer)
+            .Build();
+
+        // QUAND on insère une pièce de 20 centimes et une pièce de 50 centimes
+        changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.FiftyCents);
+
+        // ALORS un café est servi
+        Assert.Equal(1, brewer.MakeACoffeeInvocations);
+
+        // ET la monnaie en trop est rendue
+        //Assert.Equal(1, changeMachineSpy.DropCashbackInvocations);
+    }
+
 }

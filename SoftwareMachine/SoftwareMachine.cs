@@ -23,16 +23,13 @@ public class SoftwareMachineClass
         _valueCoinInMachine += somme.ValueInCents;
         _nbCoinInMachine++;
 
-        if (_valueCoinInMachine < PRIX_CAFE
-            && _nbCoinInMachine == 5)
+        if (_valueCoinInMachine < PRIX_CAFE)
         {
-            _changeMachine.FlushStoredMoney();
-            _nbCoinInMachine = 0;
-            return;
-        }
-        else if (_valueCoinInMachine < PRIX_CAFE
-            && _nbCoinInMachine < 5)
-        {
+            if (_nbCoinInMachine == 5)
+            {
+                _changeMachine.FlushStoredMoney();
+                _nbCoinInMachine = 0;
+            }
             return;
         }
 
@@ -40,12 +37,15 @@ public class SoftwareMachineClass
         {
             _brewer.MakeACoffee();
             _changeMachine.CollectStoredMoney();
-            _valueCoinInMachine = 0;
-            _nbCoinInMachine = 0;
         }
         catch
         {
             _changeMachine.FlushStoredMoney();
+        }
+        finally
+        {
+            _valueCoinInMachine = 0;
+            _nbCoinInMachine = 0;
         }
     }
 

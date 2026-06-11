@@ -2,10 +2,14 @@
 
 namespace MachineACafé;
 
+
 public class SoftwareMachineClass
 {
     private readonly IBrewer _brewer;
     private readonly IChangeMachine _changeMachine;
+    private ushort _nbCoinInMachine;
+    private ushort _valueCoinInMachine;
+    private const ushort PRIX_CAFE = 40;
 
     public SoftwareMachineClass(IBrewer brewer, IChangeMachine changeMachine)
     {
@@ -16,9 +20,16 @@ public class SoftwareMachineClass
 
     private void Insérer(Coin somme)
     {
-        if (somme.ValueInCents < 40)
+        _valueCoinInMachine += somme.ValueInCents;
+        _nbCoinInMachine++;
+
+        if (_valueCoinInMachine < PRIX_CAFE)
         {
-            _changeMachine.FlushStoredMoney();
+            if (_nbCoinInMachine == 5)
+            {
+                _changeMachine.FlushStoredMoney();
+                _nbCoinInMachine = 0;
+            }
             return;
         }
 
@@ -30,6 +41,11 @@ public class SoftwareMachineClass
         catch
         {
             _changeMachine.FlushStoredMoney();
+        }
+        finally
+        {
+            _valueCoinInMachine = 0;
+            _nbCoinInMachine = 0;
         }
     }
 

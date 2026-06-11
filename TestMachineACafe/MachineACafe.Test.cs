@@ -96,7 +96,149 @@ public class SoftwareMachineTest
         // ET CollectStoredMoney n'est pas appelé
         Assert.Equal(0, changeMachineSpy.CollectStoredMoneyInvocations);
 
-        // ET FlushStoredMoney est appelé une fois
+        // ET FlushStoredMoney est appelé 1 fois (le monnayeur attend d'autres pièces)
+        Assert.Equal(0, changeMachineSpy.FlushStoredMoneyInvocations);
+    }
+
+    [Fact]
+    public void Cas1Café2Pièces()
+    {
+        // ETANT DONNE une machine à café
+        var changeMachine = new ChangeMachineFake();
+        var changeMachineSpy = new ChangeMachineSpy(changeMachine);
+
+        var brewer = new BrewerSpy(new BrewerStub());
+        _ = new SoftwareMachineBuilder()
+            .AyantUneChangeMachine(changeMachineSpy)
+            .AyantUnBrewer(brewer)
+            .Build();
+
+        // Quand on insère 4 pièces de 20 centimes
+        changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents);
+
+        // ALORS MakeACoffee est appelé 1 fois sur le hardware
+        Assert.Equal(1, brewer.MakeACoffeeInvocations);
+
+        // ET CollectStoredMoney est appelé 1 fois sur le hardware
+        Assert.Equal(1, changeMachineSpy.CollectStoredMoneyInvocations);
+
+        // ET FlushStoredMoney n'est pas appelé
+        Assert.Equal(0, changeMachineSpy.FlushStoredMoneyInvocations);
+    }
+
+    [Fact]
+    public void Cas1Café4Pièces()
+    {
+        // ETANT DONNE une machine à café
+        var changeMachine = new ChangeMachineFake();
+        var changeMachineSpy = new ChangeMachineSpy(changeMachine);
+
+        var brewer = new BrewerSpy(new BrewerStub());
+        _ = new SoftwareMachineBuilder()
+            .AyantUneChangeMachine(changeMachineSpy)
+            .AyantUnBrewer(brewer)
+            .Build();
+
+        // Quand on insère 4 pièces de 20 centimes
+        changeMachine.SimulerInsertionPièce(CoinCode.TenCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.TenCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.TenCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.TenCents);
+
+        // ALORS MakeACoffee est appelé 1 fois sur le hardware
+        Assert.Equal(1, brewer.MakeACoffeeInvocations);
+
+        // ET CollectStoredMoney est appelé 1 fois sur le hardware
+        Assert.Equal(1, changeMachineSpy.CollectStoredMoneyInvocations);
+
+        // ET FlushStoredMoney n'est pas appelé
+        Assert.Equal(0, changeMachineSpy.FlushStoredMoneyInvocations);
+    }
+
+    [Fact]
+    public void Cas2CafésPlusieursPièces()
+    {
+        // ETANT DONNE une machine à café
+        var changeMachine = new ChangeMachineFake();
+        var changeMachineSpy = new ChangeMachineSpy(changeMachine);
+
+        var brewer = new BrewerSpy(new BrewerStub());
+        _ = new SoftwareMachineBuilder()
+            .AyantUneChangeMachine(changeMachineSpy)
+            .AyantUnBrewer(brewer)
+            .Build();
+
+        // Quand on insère 4 pièces de 20 centimes
+        changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents);
+
+        // ALORS MakeACoffee est appelé 2 fois sur le hardware
+        Assert.Equal(2, brewer.MakeACoffeeInvocations);
+
+        // ET CollectStoredMoney est appelé 2 fois sur le hardware
+        Assert.Equal(2, changeMachineSpy.CollectStoredMoneyInvocations);
+
+        // ET FlushStoredMoney n'est pas appelé
+        Assert.Equal(0, changeMachineSpy.FlushStoredMoneyInvocations);
+    }
+
+    [Fact]
+    public void Cas2CafésAvec50Cts()
+    {
+        // ETANT DONNE une machine à café
+        var changeMachine = new ChangeMachineFake();
+        var changeMachineSpy = new ChangeMachineSpy(changeMachine);
+
+        var brewer = new BrewerSpy(new BrewerStub());
+        _ = new SoftwareMachineBuilder()
+            .AyantUneChangeMachine(changeMachineSpy)
+            .AyantUnBrewer(brewer)
+            .Build();
+
+        // Quand on insère 2 pièces de 50 centimes
+        changeMachine.SimulerInsertionPièce(CoinCode.FiftyCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.FiftyCents);
+
+        // ALORS MakeACoffee est appelé 2 fois sur le hardware
+        Assert.Equal(2, brewer.MakeACoffeeInvocations);
+
+        // ET CollectStoredMoney est appelé 2 fois sur le hardware
+        Assert.Equal(2, changeMachineSpy.CollectStoredMoneyInvocations);
+
+        // ET FlushStoredMoney n'est pas appelé
+        Assert.Equal(0, changeMachineSpy.FlushStoredMoneyInvocations);
+    }
+
+    [Fact]
+    public void CasPasAssezArgentAvec5Pieces()
+    {
+        // ETANT DONNE une machine à café
+        var changeMachine = new ChangeMachineFake();
+        var changeMachineSpy = new ChangeMachineSpy(changeMachine);
+
+        var brewer = new BrewerSpy(new BrewerStub());
+        _ = new SoftwareMachineBuilder()
+            .AyantUneChangeMachine(changeMachineSpy)
+            .AyantUnBrewer(brewer)
+            .Build();
+
+        // Quand on insère 4 pièces de 20 centimes
+        changeMachine.SimulerInsertionPièce(CoinCode.FiveCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.FiveCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.FiveCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.FiveCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.FiveCents);
+
+        // ALORS MakeACoffee est appelé 0 fois sur le hardware
+        Assert.Equal(0, brewer.MakeACoffeeInvocations);
+
+        // ET CollectStoredMoney est appelé 0 fois sur le hardware
+        Assert.Equal(0, changeMachineSpy.CollectStoredMoneyInvocations);
+
+        // ET FlushStoredMoney est 1 fois appelé
         Assert.Equal(1, changeMachineSpy.FlushStoredMoneyInvocations);
     }
 }

@@ -99,4 +99,31 @@ public class SoftwareMachineTest
         // ET FlushStoredMoney est appelé une fois
         Assert.Equal(1, changeMachineSpy.FlushStoredMoneyInvocations);
     }
+    
+    [Fact]
+    public void CasDeuxPiècesInsuffisantes()
+    {
+        // ETANT DONNE une machine à café
+        var changeMachine = new ChangeMachineFake();
+        var changeMachineSpy = new ChangeMachineSpy(changeMachine);
+
+        var brewer = new BrewerSpy();
+        _ = new SoftwareMachineBuilder()
+            .AyantUneChangeMachine(changeMachineSpy)
+            .AyantUnBrewer(brewer)
+            .Build();
+
+        // QUAND on insère deux pièces insuffisantes pour le prix d'un café (20 et 10 centimes)
+        changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.TenCents);
+
+        // ALORS MakeACoffee n'est pas appelé
+        Assert.Equal(0, brewer.MakeACoffeeInvocations);
+
+        // ET CollectStoredMoney n'est pas appelé
+        Assert.Equal(0, changeMachineSpy.CollectStoredMoneyInvocations);
+
+        // ET FlushStoredMoney n'est pas appelé
+        Assert.Equal(0, changeMachineSpy.FlushStoredMoneyInvocations);
+    }
 }

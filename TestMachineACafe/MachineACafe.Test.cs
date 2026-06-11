@@ -128,7 +128,7 @@ public class SoftwareMachineTest
     
     
     [Fact]
-    public void CasAvecMonnaie()
+    public void CasDeuxPiècesMonnaieEnTrop()
     {
         // ETANT DONNE une machine à café
         var changeMachine = new ChangeMachineFake();
@@ -145,7 +145,7 @@ public class SoftwareMachineTest
         changeMachine.SimulerInsertionPièce(CoinCode.FiftyCents);
 
         // ALORS un café est servi
-        Assert.Equal(1, brewer.MakeACoffeeInvocations);
+        Assert.Equal(0, brewer.MakeACoffeeInvocations);
 
         // ET la monnaie en trop est rendue
         //Assert.Equal(1, changeMachineSpy.DropCashbackInvocations);

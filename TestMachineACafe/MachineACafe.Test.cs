@@ -241,4 +241,52 @@ public class SoftwareMachineTest
         // ET FlushStoredMoney est 1 fois appelé
         Assert.Equal(1, changeMachineSpy.FlushStoredMoneyInvocations);
     }
+
+    [Fact]
+    public void CasDeuxPiècesInsuffisantes()
+    {
+        // ETANT DONNE une machine à café
+        var changeMachine = new ChangeMachineFake();
+        var changeMachineSpy = new ChangeMachineSpy(changeMachine);
+
+        var brewer = new BrewerSpy();
+        _ = new SoftwareMachineBuilder()
+            .AyantUneChangeMachine(changeMachineSpy)
+            .AyantUnBrewer(brewer)
+            .Build();
+
+        // QUAND on insère deux pièces insuffisantes pour le prix d'un café (20 et 10 centimes)
+        changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.TenCents);
+
+        // ALORS MakeACoffee n'est pas appelé
+        Assert.Equal(0, brewer.MakeACoffeeInvocations);
+
+        // ET CollectStoredMoney n'est pas appelé
+        Assert.Equal(0, changeMachineSpy.CollectStoredMoneyInvocations);
+        // la machine est en attente de plus de pieces
+        Assert.Equal(2, changeMachineSpy.FlushStoredMoneyInvocations);
+    }
+
+
+    [Fact]
+    public void CasDeuxPiècesMonnaieEnTrop()
+    {
+        // ETANT DONNE une machine à café
+        var changeMachine = new ChangeMachineFake();
+        var changeMachineSpy = new ChangeMachineSpy(changeMachine);
+
+        var brewer = new BrewerSpy();
+        _ = new SoftwareMachineBuilder()
+            .AyantUneChangeMachine(changeMachineSpy)
+            .AyantUnBrewer(brewer)
+            .Build();
+
+        // QUAND on insère une pièce de 20 centimes et une pièce de 50 centimes
+        changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.FiftyCents);
+
+        // ALORS un café est servi
+        Assert.Equal(1, brewer.MakeACoffeeInvocations);
+    }
 }

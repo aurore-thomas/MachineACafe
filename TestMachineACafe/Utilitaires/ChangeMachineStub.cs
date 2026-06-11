@@ -1,12 +1,16 @@
 ﻿using Hardware;
 
-namespace MachineACafe.Test.Utilitaires;
+namespace MachineACafé.Test.Utilities;
 
 internal class ChangeMachineStub : IChangeMachine
 {
-    //public void MakeACoffe()
-    //{
-    //}
+    public void RegisterMoneyInsertedCallback(Action<CoinCode> callback)
+    {
+    }
+
+    public void FlushStoredMoney()
+    {
+    }
 
     public void CollectStoredMoney()
     {
@@ -15,13 +19,5 @@ internal class ChangeMachineStub : IChangeMachine
     public bool DropCashback(CoinCode coinCode)
     {
         return false;
-    }
-
-    public void FlushStoredMoney()
-    {
-    }
-
-    public void RegisterMoneyInsertedCallback(Action<CoinCode> callback)
-    {
     }
 }

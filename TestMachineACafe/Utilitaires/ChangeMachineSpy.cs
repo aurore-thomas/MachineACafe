@@ -1,7 +1,6 @@
 ﻿using Hardware;
-using SoftwareMachine;
 
-namespace MachineACafe.Test.Utilitaires;
+namespace MachineACafé.Test.Utilities;
 
 internal class ChangeMachineSpy : IChangeMachine
 {
@@ -9,21 +8,19 @@ internal class ChangeMachineSpy : IChangeMachine
 
     public ushort FlushStoredMoneyInvocations { get; private set; }
     public ushort CollectStoredMoneyInvocations { get; private set; }
+    public bool Untouched => FlushStoredMoneyInvocations == 0 && CollectStoredMoneyInvocations == 0;
+
+    public ChangeMachineSpy() : this(new ChangeMachineStub())
+    { }
 
     public ChangeMachineSpy(IChangeMachine behavior)
     {
         _behavior = behavior;
     }
 
-    public void CollectStoredMoney()
+    public void RegisterMoneyInsertedCallback(Action<CoinCode> callback)
     {
-        CollectStoredMoneyInvocations += SoftwareMachineClass.PrixDuCafeEnCentimes;
-        _behavior.CollectStoredMoney();
-    }
-
-    public bool DropCashback(CoinCode coinCode)
-    {
-        return _behavior.DropCashback(coinCode);
+        _behavior.RegisterMoneyInsertedCallback(callback);
     }
 
     public void FlushStoredMoney()
@@ -32,8 +29,14 @@ internal class ChangeMachineSpy : IChangeMachine
         _behavior.FlushStoredMoney();
     }
 
-    public void RegisterMoneyInsertedCallback(Action<CoinCode> callback)
+    public void CollectStoredMoney()
     {
-        _behavior.RegisterMoneyInsertedCallback(callback);
+        CollectStoredMoneyInvocations++;
+        _behavior.CollectStoredMoney();
+    }
+
+    public bool DropCashback(CoinCode coinCode)
+    {
+        return _behavior.DropCashback(coinCode);
     }
 }

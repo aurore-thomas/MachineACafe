@@ -1,49 +1,49 @@
 ﻿using Hardware;
 
-namespace MachineACafe.Test.Utilitaires
+namespace MachineACafé.Test.Utilities;
+
+internal class BrewerSpy : IBrewer
 {
-    internal class BrewerSpy : IBrewer
+    private readonly IBrewer _behavior;
+
+    public ushort MakeACoffeeInvocations { get; private set; }
+    public bool Untouched => MakeACoffeeInvocations == 0;
+
+    public BrewerSpy() : this(new BrewerStub()) { }
+
+    public BrewerSpy(IBrewer behavior)
     {
-        private readonly IBrewer _behavior;
+        _behavior = behavior;
+    }
 
-        public ushort MakeACoffeInvocations { get; private set;  }
+    public bool MakeACoffee()
+    {
+        MakeACoffeeInvocations++;
+        return _behavior.MakeACoffee();
+    }
 
-        public BrewerSpy() : this(new BrewerStub()) { }
+    public bool TryPullWater()
+    {
+        return _behavior.TryPullWater();
+    }
 
-        public BrewerSpy(IBrewer behavior)
-        {
-            _behavior = behavior;
-        }
+    public bool PourMilk()
+    {
+        return _behavior.PourMilk();
+    }
 
-        public bool MakeACoffee()
-        {
-            MakeACoffeInvocations++;
-            return _behavior.MakeACoffee();
-        }
+    public bool PourWater()
+    {
+        return _behavior.PourWater();
+    }
 
-        public bool PourChocolate()
-        {
-            return _behavior.PourChocolate();
-        }
+    public bool PourSugar()
+    {
+        return _behavior.PourSugar();
+    }
 
-        public bool PourMilk()
-        {
-            return (_behavior.PourMilk());
-        }
-
-        public bool PourSugar()
-        {
-            return (_behavior.PourSugar());
-        }
-
-        public bool PourWater()
-        {
-            return (_behavior.PourWater());
-        }
-
-        public bool TryPullWater()
-        {
-            return (_behavior.TryPullWater());
-        }
+    public bool PourChocolate()
+    {
+        return _behavior.PourChocolate();
     }
 }

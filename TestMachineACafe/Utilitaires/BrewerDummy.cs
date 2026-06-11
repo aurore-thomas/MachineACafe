@@ -1,6 +1,6 @@
 ﻿using Hardware;
 
-namespace MachineACafe.Test.Utilitaires;
+namespace MachineACafé.Test.Utilities;
 
 internal class BrewerDummy : IBrewer
 {
@@ -9,7 +9,7 @@ internal class BrewerDummy : IBrewer
         throw new Exception("Défaillant");
     }
 
-    public bool PourChocolate()
+    public bool TryPullWater()
     {
         throw new Exception("Défaillant");
     }
@@ -19,17 +19,17 @@ internal class BrewerDummy : IBrewer
         throw new Exception("Défaillant");
     }
 
-    public bool PourSugar()
-    {
-        throw new Exception("Défaillant");
-    }
-
     public bool PourWater()
     {
         throw new Exception("Défaillant");
     }
 
-    public bool TryPullWater()
+    public bool PourSugar()
+    {
+        throw new Exception("Défaillant");
+    }
+
+    public bool PourChocolate()
     {
         throw new Exception("Défaillant");
     }

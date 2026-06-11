@@ -1,40 +1,36 @@
 ﻿using Hardware;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace MachineACafe.Test.Utilitaires
+namespace MachineACafé.Test.Utilities;
+
+internal class BrewerStub : IBrewer
 {
-    internal class BrewerStub : IBrewer
+    public bool MakeACoffee()
     {
-        public bool MakeACoffee()
-        {
-            return true;
-        }
+        return true;
+    }
 
-        public bool PourChocolate()
-        {
-            return true;
-        }
+    public bool TryPullWater()
+    {
+        return true;
+    }
 
-        public bool PourMilk()
-        {
-            return true;
-        }
+    public bool PourMilk()
+    {
+        return true;
+    }
 
-        public bool PourSugar()
-        {
-            return true;
-        }
+    public bool PourWater()
+    {
+        return true;
+    }
 
-        public bool PourWater()
-        {
-            return true;
-        }
+    public bool PourSugar()
+    {
+        return true;
+    }
 
-        public bool TryPullWater()
-        {
-            return true;
-        }
+    public bool PourChocolate()
+    {
+        return true;
     }
 }

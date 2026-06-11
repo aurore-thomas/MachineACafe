@@ -1,7 +1,6 @@
 ﻿using Hardware;
-using SoftwareMachine;
 
-namespace MachineACafe.Test.Utilitaires;
+namespace MachineACafé.Test.Utilities;
 
 internal class SoftwareMachineBuilder
 {
@@ -16,12 +15,6 @@ internal class SoftwareMachineBuilder
     public SoftwareMachineBuilder AyantUnBrewer(IBrewer brewer)
     {
         _brewer = brewer;
-        return this;
-    }
-
-    public SoftwareMachineBuilder AyantUnBrewerDefaillant()
-    {
-        _brewer = new BrewerDummy();
         return this;
     }
 

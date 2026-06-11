@@ -15,16 +15,16 @@ public class SoftwareMachineClass
     {
         _brewer = brewer;
         _changeMachine = changeMachine;
-        _changeMachine.RegisterMoneyInsertedCallback(coin => Insérer(new Coin((ushort)coin), new bool()));
+        _changeMachine.RegisterMoneyInsertedCallback(coin => Insérer(new Coin((ushort)coin)));
     }
 
-    private void Insérer(Coin somme, bool dernierePièce)
+    private void Insérer(Coin somme)
     {
         _valueCoinInMachine += somme.ValueInCents;
         _nbCoinInMachine++;
 
         if (_valueCoinInMachine < PRIX_CAFE
-            && (_nbCoinInMachine == 5 || dernierePièce))
+            && _nbCoinInMachine == 5)
         {
             _changeMachine.FlushStoredMoney();
             _nbCoinInMachine = 0;
@@ -40,6 +40,8 @@ public class SoftwareMachineClass
         {
             _brewer.MakeACoffee();
             _changeMachine.CollectStoredMoney();
+            _valueCoinInMachine = 0;
+            _nbCoinInMachine = 0;
         }
         catch
         {

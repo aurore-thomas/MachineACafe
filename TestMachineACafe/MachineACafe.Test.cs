@@ -40,7 +40,7 @@ public class SoftwareMachineTest
             .Build();
 
         // QUAND on insère une somme supérieure ou égale au prix d'un café
-        changeMachine.SimulerInsertionPièce(CoinCode.FiftyCents, true);
+        changeMachine.SimulerInsertionPièce(CoinCode.FiftyCents);
 
         // ALORS MakeACoffee est appelé une fois sur le hardware
         Assert.Equal(1, brewer.MakeACoffeeInvocations);
@@ -65,7 +65,7 @@ public class SoftwareMachineTest
             .Build();
 
         // QUAND on insère une somme supérieure ou égale au prix d'un café
-        changeMachine.SimulerInsertionPièce(CoinCode.FiftyCents, true);
+        changeMachine.SimulerInsertionPièce(CoinCode.FiftyCents);
 
         // ALORS FlushStoredMoney est appelé une fois
         Assert.Equal(1, changeMachineSpy.FlushStoredMoneyInvocations);
@@ -88,7 +88,7 @@ public class SoftwareMachineTest
             .Build();
 
         // QUAND on insère moins que le prix d'un café
-        changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents, true);
+        changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents);
 
         // ALORS MakeACoffee n'est pas appelé
         Assert.Equal(0, brewer.MakeACoffeeInvocations);
@@ -96,8 +96,8 @@ public class SoftwareMachineTest
         // ET CollectStoredMoney n'est pas appelé
         Assert.Equal(0, changeMachineSpy.CollectStoredMoneyInvocations);
 
-        // ET FlushStoredMoney est appelé une fois
-        Assert.Equal(1, changeMachineSpy.FlushStoredMoneyInvocations);
+        // ET FlushStoredMoney est appelé 1 fois (le monnayeur attend d'autres pièces)
+        Assert.Equal(0, changeMachineSpy.FlushStoredMoneyInvocations);
     }
 
     [Fact]
@@ -114,8 +114,8 @@ public class SoftwareMachineTest
             .Build();
 
         // Quand on insère 4 pièces de 20 centimes
-        changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents, false);
-        changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents, true);
+        changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents);
 
         // ALORS MakeACoffee est appelé 1 fois sur le hardware
         Assert.Equal(1, brewer.MakeACoffeeInvocations);
@@ -141,10 +141,10 @@ public class SoftwareMachineTest
             .Build();
 
         // Quand on insère 4 pièces de 20 centimes
-        changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents, false);
-        changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents, false);
-        changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents, false);
-        changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents, true);
+        changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents);
 
         // ALORS MakeACoffee est appelé 2 fois sur le hardware
         Assert.Equal(2, brewer.MakeACoffeeInvocations);
@@ -170,11 +170,11 @@ public class SoftwareMachineTest
             .Build();
 
         // Quand on insère 4 pièces de 20 centimes
-        changeMachine.SimulerInsertionPièce(CoinCode.FiveCents, false);
-        changeMachine.SimulerInsertionPièce(CoinCode.FiveCents, false);
-        changeMachine.SimulerInsertionPièce(CoinCode.FiveCents, false);
-        changeMachine.SimulerInsertionPièce(CoinCode.FiveCents, false);
-        changeMachine.SimulerInsertionPièce(CoinCode.FiveCents, true);
+        changeMachine.SimulerInsertionPièce(CoinCode.FiveCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.FiveCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.FiveCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.FiveCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.FiveCents);
 
         // ALORS MakeACoffee est appelé 0 fois sur le hardware
         Assert.Equal(0, brewer.MakeACoffeeInvocations);
@@ -182,7 +182,7 @@ public class SoftwareMachineTest
         // ET CollectStoredMoney est appelé 0 fois sur le hardware
         Assert.Equal(0, changeMachineSpy.CollectStoredMoneyInvocations);
 
-        // ET FlushStoredMoney n'est pas appelé
-        Assert.Equal(0, changeMachineSpy.FlushStoredMoneyInvocations);
+        // ET FlushStoredMoney est 1 fois appelé
+        Assert.Equal(1, changeMachineSpy.FlushStoredMoneyInvocations);
     }
 }

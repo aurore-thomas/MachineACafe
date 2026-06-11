@@ -25,7 +25,7 @@ public class ChangeMachineFake : IChangeMachine
         throw new NotImplementedException();
     }
 
-    public void SimulerInsertionPièce(CoinCode coinCode, bool dernierePièce)
+    public void SimulerInsertionPièce(CoinCode coinCode)
     {
         _callback?.Invoke(coinCode);
     }

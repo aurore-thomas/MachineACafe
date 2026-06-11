@@ -186,6 +186,33 @@ public class SoftwareMachineTest
     }
 
     [Fact]
+    public void Cas2CafésAvec50Cts()
+    {
+        // ETANT DONNE une machine à café
+        var changeMachine = new ChangeMachineFake();
+        var changeMachineSpy = new ChangeMachineSpy(changeMachine);
+
+        var brewer = new BrewerSpy(new BrewerStub());
+        _ = new SoftwareMachineBuilder()
+            .AyantUneChangeMachine(changeMachineSpy)
+            .AyantUnBrewer(brewer)
+            .Build();
+
+        // Quand on insère 2 pièces de 50 centimes
+        changeMachine.SimulerInsertionPièce(CoinCode.FiftyCents);
+        changeMachine.SimulerInsertionPièce(CoinCode.FiftyCents);
+
+        // ALORS MakeACoffee est appelé 2 fois sur le hardware
+        Assert.Equal(2, brewer.MakeACoffeeInvocations);
+
+        // ET CollectStoredMoney est appelé 2 fois sur le hardware
+        Assert.Equal(2, changeMachineSpy.CollectStoredMoneyInvocations);
+
+        // ET FlushStoredMoney n'est pas appelé
+        Assert.Equal(0, changeMachineSpy.FlushStoredMoneyInvocations);
+    }
+
+    [Fact]
     public void CasPasAssezArgentAvec5Pieces()
     {
         // ETANT DONNE une machine à café

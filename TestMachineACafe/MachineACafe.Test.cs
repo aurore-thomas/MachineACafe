@@ -99,7 +99,7 @@ public class SoftwareMachineTest
         // ET FlushStoredMoney est appelé une fois
         Assert.Equal(1, changeMachineSpy.FlushStoredMoneyInvocations);
     }
-    
+
     [Fact]
     public void CasDeuxPiècesInsuffisantes()
     {
@@ -125,8 +125,8 @@ public class SoftwareMachineTest
         // la machine est en attente de plus de pieces
         Assert.Equal(2, changeMachineSpy.FlushStoredMoneyInvocations);
     }
-    
-    
+
+
     [Fact]
     public void CasDeuxPiècesMonnaieEnTrop()
     {
@@ -145,10 +145,6 @@ public class SoftwareMachineTest
         changeMachine.SimulerInsertionPièce(CoinCode.FiftyCents);
 
         // ALORS un café est servi
-        Assert.Equal(0, brewer.MakeACoffeeInvocations);
-
-        // ET la monnaie en trop est rendue
-        //Assert.Equal(1, changeMachineSpy.DropCashbackInvocations);
+        Assert.Equal(1, brewer.MakeACoffeeInvocations);
     }
-
 }

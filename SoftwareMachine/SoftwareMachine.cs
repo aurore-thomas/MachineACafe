@@ -21,6 +21,7 @@ public class SoftwareMachineClass
     private void Insérer(Coin somme, bool dernierePièce)
     {
         _valueCoinInMachine += somme.ValueInCents;
+        _nbCoinInMachine++;
 
         if (_valueCoinInMachine < PRIX_CAFE
             && (_nbCoinInMachine == 5 || dernierePièce))
@@ -32,7 +33,6 @@ public class SoftwareMachineClass
         else if (_valueCoinInMachine < PRIX_CAFE
             && _nbCoinInMachine < 5)
         {
-            _nbCoinInMachine++;
             return;
         }
 

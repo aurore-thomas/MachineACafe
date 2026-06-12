@@ -5,8 +5,6 @@ using Assert = Xunit.Assert;
 
 namespace MachineACafé.Test;
 
-//TODO : Mocks automatisés.
-
 public class SoftwareMachineTest
 {
     [Fact]
@@ -96,7 +94,7 @@ public class SoftwareMachineTest
         // ET CollectStoredMoney n'est pas appelé
         Assert.Equal(0, changeMachineSpy.CollectStoredMoneyInvocations);
 
-        // ET FlushStoredMoney est appelé 1 fois (le monnayeur attend d'autres pièces)
+        // ET FlushStoredMoney n'est pas appelé (le monnayeur attend d'autres pièces)
         Assert.Equal(0, changeMachineSpy.FlushStoredMoneyInvocations);
     }
 
@@ -113,7 +111,7 @@ public class SoftwareMachineTest
             .AyantUnBrewer(brewer)
             .Build();
 
-        // Quand on insère 4 pièces de 20 centimes
+        // Quand on insère 2 pièces de 20 centimes
         changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents);
         changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents);
 
@@ -140,7 +138,7 @@ public class SoftwareMachineTest
             .AyantUnBrewer(brewer)
             .Build();
 
-        // Quand on insère 4 pièces de 20 centimes
+        // Quand on insère 4 pièces de 10 centimes
         changeMachine.SimulerInsertionPièce(CoinCode.TenCents);
         changeMachine.SimulerInsertionPièce(CoinCode.TenCents);
         changeMachine.SimulerInsertionPièce(CoinCode.TenCents);
@@ -225,7 +223,7 @@ public class SoftwareMachineTest
             .AyantUnBrewer(brewer)
             .Build();
 
-        // Quand on insère 4 pièces de 20 centimes
+        // Quand on insère 4 pièces de 5 centimes
         changeMachine.SimulerInsertionPièce(CoinCode.FiveCents);
         changeMachine.SimulerInsertionPièce(CoinCode.FiveCents);
         changeMachine.SimulerInsertionPièce(CoinCode.FiveCents);

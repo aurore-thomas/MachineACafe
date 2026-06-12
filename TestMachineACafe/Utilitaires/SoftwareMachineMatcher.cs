@@ -10,9 +10,15 @@ internal static class SoftwareMachineMatcher
         Assert.Equal(1, changeMachineSpy.FlushStoredMoneyInvocations);
     }
 
-    public static void ArgentEncaissé(this ChangeMachineSpy changeMachineSpy)
+    public static void ArgentEncaissé(this ChangeMachineSpy changeMachineSpy, ushort nbEncaissement)
     {
-        Assert.Equal(1, changeMachineSpy.CollectStoredMoneyInvocations);
+        Assert.Equal(nbEncaissement, changeMachineSpy.CollectStoredMoneyInvocations);
+        Assert.Equal(0, changeMachineSpy.FlushStoredMoneyInvocations);
+    }
+
+    public static void ArgentEnAttente(this ChangeMachineSpy changeMachineSpy)
+    {
+        Assert.Equal(0, changeMachineSpy.CollectStoredMoneyInvocations);
         Assert.Equal(0, changeMachineSpy.FlushStoredMoneyInvocations);
     }
 

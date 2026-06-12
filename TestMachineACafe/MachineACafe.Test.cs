@@ -238,13 +238,11 @@ public class SoftwareMachineTest
         changeMachine.SimulerInsertionPièce(CoinCode.TwentyCents);
         changeMachine.SimulerInsertionPièce(CoinCode.TenCents);
 
-        // ALORS MakeACoffee n'est pas appelé
-        Assert.Equal(0, brewer.MakeACoffeeInvocations);
+        // ALORS aucun café n'est servi
+        brewer.CafesServis(0);
 
-        // ET CollectStoredMoney n'est pas appelé
-        Assert.Equal(0, changeMachineSpy.CollectStoredMoneyInvocations);
-        // la machine est en attente de plus de pieces
-        Assert.Equal(2, changeMachineSpy.FlushStoredMoneyInvocations);
+        // ET l'argent est en attente (la machine attend d'autres pièces)
+        changeMachineSpy.ArgentEnAttente();
     }
 
 
@@ -266,6 +264,9 @@ public class SoftwareMachineTest
         changeMachine.SimulerInsertionPièce(CoinCode.FiftyCents);
 
         // ALORS un café est servi
-        Assert.Equal(1, brewer.MakeACoffeeInvocations);
+        brewer.CafesServis(1);
+
+        // ET l'argent est encaissé
+        changeMachineSpy.ArgentEncaissé(1);
     }
 }

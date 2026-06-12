@@ -40,14 +40,11 @@ public class SoftwareMachineTest
         // QUAND on insère une somme supérieure ou égale au prix d'un café
         changeMachine.SimulerInsertionPièce(CoinCode.FiftyCents);
 
-        // ALORS MakeACoffee est appelé une fois sur le hardware
-        Assert.Equal(1, brewer.MakeACoffeeInvocations);
+        // ALORS 1 café est servi
+        brewer.CafesServis(1);
 
-        // ET CollectStoredMoney est appelé une fois sur le hardware
-        Assert.Equal(1, changeMachineSpy.CollectStoredMoneyInvocations);
-
-        // ET FlushStoredMoney n'est pas appelé
-        Assert.Equal(0, changeMachineSpy.FlushStoredMoneyInvocations);
+        // ET l'argent est encaissé
+        changeMachineSpy.ArgentEncaissé();
     }
 
     [Fact]

@@ -1,9 +1,17 @@
-﻿using Xunit;
+﻿using Hardware;
+using Moq;
+using Xunit;
 
 namespace MachineACafé.Test.Utilities;
 
 internal static class SoftwareMachineMatcher
 {
+    public static void AucuneAction(this ChangeMachineSpy changeMachineSpy)
+    {
+        Assert.Equal(0, changeMachineSpy.FlushStoredMoneyInvocations);
+        Assert.Equal(0, changeMachineSpy.CollectStoredMoneyInvocations);
+    }
+
     public static void ArgentRestitué(this ChangeMachineSpy changeMachineSpy)
     {
         Assert.Equal(0, changeMachineSpy.CollectStoredMoneyInvocations);
@@ -14,6 +22,8 @@ internal static class SoftwareMachineMatcher
     {
         Assert.Equal(nbEncaissement, changeMachineSpy.CollectStoredMoneyInvocations);
         Assert.Equal(0, changeMachineSpy.FlushStoredMoneyInvocations);
+
+
     }
 
     public static void ArgentEnAttente(this ChangeMachineSpy changeMachineSpy)

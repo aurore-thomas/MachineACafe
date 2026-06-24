@@ -38,7 +38,10 @@ public class SoftwareMachineClass
             _brewer.MakeACoffee();
             _changeMachine.CollectStoredMoney();
 
-
+            if (_valueCoinInMachine > PRIX_CAFE)
+            {
+                _changeMachine.FlushStoredMoney();
+            }
         }
         catch
         {

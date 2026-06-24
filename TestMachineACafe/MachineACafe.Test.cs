@@ -72,7 +72,7 @@ public class SoftwareMachineTest
     }
 
     [Fact]
-    public void Cas1Café2Pièces()
+    public void Cas1Café2PiècesSansRendu()
     {
         // ETANT DONNE une machine à café
         var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy, coinInMachine) = LogicielMachineACafé.Default;
@@ -81,18 +81,38 @@ public class SoftwareMachineTest
         changeMachineFake.SimulerInsertionPièce(CoinCode.TwentyCents);
         changeMachineFake.SimulerInsertionPièce(CoinCode.TwentyCents);
 
-        // ALORS MakeACoffee est appelé 1 fois sur le hardware
-        Assert.Equal(1, brewerSpy.MakeACoffeeInvocations);
+        // ALORS 1 café est servi
+        brewerSpy.CafesServis(1);
 
-        // ET CollectStoredMoney est appelé 1 fois sur le hardware
-        Assert.Equal(1, changeMachineSpy.CollectStoredMoneyInvocations);
+        // ET l'argent est encaissé ET il n'y a pas de surplus d'argent à rendre
+        changeMachineSpy.ArgentEncaisséSansRendu(1);
+    }
 
-        // ET FlushStoredMoney n'est pas appelé
-        Assert.Equal(0, changeMachineSpy.FlushStoredMoneyInvocations);
+    [Theory]
+    [InlineData(CoinCode.TwentyCents, CoinCode.FiftyCents)]
+    [InlineData(CoinCode.TwentyCents, CoinCode.OneEuro)]
+    [InlineData(CoinCode.TwentyCents, CoinCode.TwoEuros)]
+    [InlineData(CoinCode.TenCents, CoinCode.FiftyCents)]
+    [InlineData(CoinCode.TenCents, CoinCode.OneEuro)]
+    [InlineData(CoinCode.TenCents, CoinCode.TwoEuros)]
+    public void Cas1Café2PiècesAvecRendu(CoinCode coin1, CoinCode coin2)
+    {
+        // ETANT DONNE une machine à café
+        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy, coinInMachine) = LogicielMachineACafé.Default;
+
+        // Quand on insère 2 pièces de 50 centimes
+        changeMachineFake.SimulerInsertionPièce(coin1);
+        changeMachineFake.SimulerInsertionPièce(coin2);
+
+        /// ALORS un café est servi
+        brewerSpy.CafesServis(1);
+
+        // ET l'argent est encaissé ET il n'y a pas de surplus d'argent à rendre
+        changeMachineSpy.ArgentEncaisséEtSurplusRendu(1);
     }
 
     [Fact]
-    public void Cas1Café4Pièces()
+    public void Cas1Café4PiècesSansRendu()
     {
         // ETANT DONNE une machine à café
         var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy, coinInMachine) = LogicielMachineACafé.Default;
@@ -106,7 +126,7 @@ public class SoftwareMachineTest
         // ALORS un café est servi
         brewerSpy.CafesServis(1);
 
-        // ET l'argent est encaissé
+        // ET l'argent est encaissé ET il n'y a pas de surplus d'argent à rendre
         changeMachineSpy.ArgentEncaisséSansRendu(1);
     }
 

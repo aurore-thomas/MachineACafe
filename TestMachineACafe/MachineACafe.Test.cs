@@ -218,4 +218,27 @@ public class SoftwareMachineTest
         // ET le surplus d'argent n'est pas rendu (la machine ne peut pas rendre la monnaie)
         changeMachineSpy.ArgentEncaisséSansRendu(1);
     }
+
+    [Theory]
+    [InlineData(CoinCode.FiftyCents, CoinCode.FiftyCents)]
+    [InlineData(CoinCode.OneEuro, CoinCode.FiftyCents)]
+    [InlineData(CoinCode.TwoEuros, CoinCode.FiftyCents)]
+    [InlineData(CoinCode.OneEuro, CoinCode.OneEuro)]
+    [InlineData(CoinCode.TwoEuros, CoinCode.OneEuro)]
+    [InlineData(CoinCode.TwoEuros, CoinCode.TwoEuros)]
+    public void CasMonnayeurVideAvecDeuxPièces(CoinCode coin1, CoinCode coin2)
+    {
+        // ETANT DONNE une machine à café
+        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy, coinInMachine) = LogicielMachineACafé.NoCoinInMachine;
+        
+        // QUAND on insère 2 pièces chacune suffisantes pour le prix d'un café et le monnayeur est vide (pas de monnaie pour rendre la différence)
+        changeMachineFake.SimulerInsertionPièce(coin1);
+        changeMachineFake.SimulerInsertionPièce(coin2);
+
+        // ALORS 2 cafés sont servis
+        brewerSpy.CafesServis(2);
+
+        // ET le surplus d'argent n'est pas rendu (la machine ne peut pas rendre la monnaie)
+        changeMachineSpy.ArgentEncaisséSansRendu(2);
+    }
 }

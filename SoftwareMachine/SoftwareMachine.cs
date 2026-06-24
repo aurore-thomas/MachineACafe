@@ -11,17 +11,22 @@ public class SoftwareMachineClass
     private ushort _valueCoinInMachine;
     private const ushort PRIX_CAFE = 40;
 
-    public SoftwareMachineClass(IBrewer brewer, IChangeMachine changeMachine)
+    private Dictionary<CoinCode, ushort> _nbCoinInMachineByCoinCode = new Dictionary<CoinCode, ushort>();
+
+    public SoftwareMachineClass(IBrewer brewer, IChangeMachine changeMachine, Dictionary<CoinCode, ushort> nbCoinInMachineByCoinCode)
     {
         _brewer = brewer;
         _changeMachine = changeMachine;
         _changeMachine.RegisterMoneyInsertedCallback(coin => Insérer(new Coin((ushort)coin)));
+        _nbCoinInMachineByCoinCode = nbCoinInMachineByCoinCode;
     }
 
     private void Insérer(Coin somme)
     {
         _valueCoinInMachine += somme.ValueInCents;
         _nbCoinInMachine++;
+
+        CoinCode coinCode = somme.GetCoinCode();
 
         if (_valueCoinInMachine < PRIX_CAFE)
         {
@@ -40,7 +45,27 @@ public class SoftwareMachineClass
 
             if (_valueCoinInMachine > PRIX_CAFE)
             {
-                _changeMachine.FlushStoredMoney();
+                var valueToReturn = (ushort)(_valueCoinInMachine - PRIX_CAFE);
+
+                var piecesDisponiblesTriees = _nbCoinInMachineByCoinCode
+                    .Select(kvp => new { Code = kvp.Key, Valeur = somme.GetValue(kvp.Key) })
+                    .OrderByDescending(p => p.Valeur)
+                    .ToList();
+
+                foreach (var piece in piecesDisponiblesTriees)
+                {
+                    if (valueToReturn == 0) break;
+
+                    while (valueToReturn >= piece.Valeur && _nbCoinInMachineByCoinCode[piece.Code] > 0)
+                    {
+                        _nbCoinInMachineByCoinCode[piece.Code]--;
+                        valueToReturn -= piece.Valeur;
+
+                        _changeMachine.FlushStoredMoney();
+                    }
+                }
+
+                //_changeMachine.FlushStoredMoney();
             }
         }
         catch

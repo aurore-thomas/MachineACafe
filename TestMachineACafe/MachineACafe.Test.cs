@@ -12,7 +12,7 @@ public class SoftwareMachineTest
     public void AucuneAction()
     {
         // ETANT DONNE une machine à café
-        var(_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy) = LogicielMachineACafé.Default; 
+        var(_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy, coinInMachine) = LogicielMachineACafé.Default; 
 
         // QUAND aucune action n'est réalisée
 
@@ -27,7 +27,7 @@ public class SoftwareMachineTest
     public void CasNominal(CoinCode coin)
     {
         // ETANT DONNE une machine à café
-        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy) = LogicielMachineACafé.Default;
+        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy, coinInMachine) = LogicielMachineACafé.Default;
 
         // QUAND on insère une somme supérieure ou égale au prix d'un café
         changeMachineFake.SimulerInsertionPièce(coin);
@@ -43,7 +43,7 @@ public class SoftwareMachineTest
     public void CasBrewerDéfaillant()
     {
         // ETANT DONNE une machine à café ayant un brewer défaillant
-        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy) = LogicielMachineACafé.Defaillant;
+        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy, coinInMachine) = LogicielMachineACafé.Defaillant;
 
         // QUAND on insère une somme supérieure ou égale au prix d'un café
         changeMachineFake.SimulerInsertionPièce(CoinCode.FiftyCents);
@@ -59,7 +59,7 @@ public class SoftwareMachineTest
     public void PasAssezArgent(CoinCode coin)
     {
         // ETANT DONNE une machine à café
-        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy) = LogicielMachineACafé.Default;
+        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy, coinInMachine) = LogicielMachineACafé.Default;
 
         // QUAND on insère 1 pièce qui vaut moins que le prix d'un café
         changeMachineFake.SimulerInsertionPièce(coin);
@@ -71,23 +71,11 @@ public class SoftwareMachineTest
         changeMachineSpy.ArgentEnAttente();
     }
 
-    public void Cas1CafeTropArgent()
-    {
-        // ETANT DONNE une machine à café
-        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy) = LogicielMachineACafé.Default;
-        // QUAND on insère 1 pièce de 50 centimes
-        changeMachineFake.SimulerInsertionPièce(CoinCode.FiftyCents);
-        // ALORS un café est servi
-        brewerSpy.CafesServis(1);
-        // ET l'argent est encaissé
-        changeMachineSpy.ArgentEncaissé(1);
-    }   
-
     [Fact]
     public void Cas1Café2Pièces()
     {
         // ETANT DONNE une machine à café
-        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy) = LogicielMachineACafé.Default;
+        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy, coinInMachine) = LogicielMachineACafé.Default;
 
         // Quand on insère 2 pièces de 20 centimes
         changeMachineFake.SimulerInsertionPièce(CoinCode.TwentyCents);
@@ -107,7 +95,7 @@ public class SoftwareMachineTest
     public void Cas1Café4Pièces()
     {
         // ETANT DONNE une machine à café
-        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy) = LogicielMachineACafé.Default;
+        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy, coinInMachine) = LogicielMachineACafé.Default;
 
         // Quand on insère 4 pièces de 10 centimes
         changeMachineFake.SimulerInsertionPièce(CoinCode.TenCents);
@@ -119,14 +107,14 @@ public class SoftwareMachineTest
         brewerSpy.CafesServis(1);
 
         // ET l'argent est encaissé
-        changeMachineSpy.ArgentEncaissé(1);
+        changeMachineSpy.ArgentEncaisséSansRendu(1);
     }
 
     [Fact]
     public void Cas2CafésPlusieursPièces()
     {
         // ETANT DONNE une machine à café
-        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy) = LogicielMachineACafé.Default;
+        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy, coinInMachine) = LogicielMachineACafé.Default;
 
         // QUAND on insère 4 pièces de 20 centimes
         changeMachineFake.SimulerInsertionPièce(CoinCode.TwentyCents);
@@ -138,14 +126,14 @@ public class SoftwareMachineTest
         brewerSpy.CafesServis(2);
 
         // ET l'argent est encaissé 2 fois
-        changeMachineSpy.ArgentEncaissé(2);   
+        changeMachineSpy.ArgentEncaisséSansRendu(2);   
     }
 
     [Fact]
     public void Cas2CafésAvec50Cts()
     {
         // ETANT DONNE une machine à café
-        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy) = LogicielMachineACafé.Default;
+        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy, coinInMachine) = LogicielMachineACafé.Default;
 
         // Quand on insère 2 pièces de 50 centimes
         changeMachineFake.SimulerInsertionPièce(CoinCode.FiftyCents);
@@ -155,14 +143,14 @@ public class SoftwareMachineTest
         brewerSpy.CafesServis(2);
 
         // ET l'argent est encaissé 2 fois
-        changeMachineSpy.ArgentEncaissé(2);
+        changeMachineSpy.ArgentEncaisséEtSurplusRendu(2);
     }
 
     [Fact]
     public void CasPasAssezArgentAvec5Pieces()
     {
         // ETANT DONNE une machine à café
-        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy) = LogicielMachineACafé.Default;
+        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy, coinInMachine) = LogicielMachineACafé.Default;
 
         // Quand on insère 4 pièces de 5 centimes
         changeMachineFake.SimulerInsertionPièce(CoinCode.FiveCents);
@@ -182,7 +170,7 @@ public class SoftwareMachineTest
     public void CasDeuxPiècesInsuffisantes()
     {
         // ETANT DONNE une machine à café
-        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy) = LogicielMachineACafé.Default;
+        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy, coinInMachine) = LogicielMachineACafé.Default;
 
         // QUAND on insère deux pièces insuffisantes pour le prix d'un café (20 et 10 centimes)
         changeMachineFake.SimulerInsertionPièce(CoinCode.TwentyCents);
@@ -199,7 +187,7 @@ public class SoftwareMachineTest
     public void CasDeuxPiècesMonnaieEnTrop()
     {
         // ETANT DONNE une machine à café
-        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy) = LogicielMachineACafé.Default;
+        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy, coinInMachine) = LogicielMachineACafé.Default;
 
         // QUAND on insère une pièce de 20 centimes et une pièce de 50 centimes
         changeMachineFake.SimulerInsertionPièce(CoinCode.TwentyCents);
@@ -209,6 +197,25 @@ public class SoftwareMachineTest
         brewerSpy.CafesServis(1);
 
         // ET l'argent est encaissé
-        changeMachineSpy.ArgentEncaissé(1);
+        changeMachineSpy.ArgentEncaisséEtSurplusRendu(1);
+    }
+
+    [Theory]
+    [InlineData(CoinCode.FiftyCents)]
+    [InlineData(CoinCode.OneEuro)]
+    [InlineData(CoinCode.TwoEuros)]
+    public void CasMonnayeurVide(CoinCode coin)
+    {
+        // ETANT DONNE une machine à café
+        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy, coinInMachine) = LogicielMachineACafé.NoCoinInMachine;
+
+        // QUAND on insère 1 pièce suffisante pour le prix d'un café et le monnayeur est vide (pas de monnaie pour rendre la différence)
+        changeMachineFake.SimulerInsertionPièce(coin);
+
+        // ALORS 1 café est servi
+        brewerSpy.CafesServis(1);
+
+        // ET le surplus d'argent n'est pas rendu (la machine ne peut pas rendre la monnaie)
+        changeMachineSpy.ArgentEncaisséSansRendu(1);
     }
 }

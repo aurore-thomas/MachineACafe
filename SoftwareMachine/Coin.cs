@@ -1,4 +1,6 @@
-﻿namespace MachineACafé;
+﻿using Hardware;
+
+namespace MachineACafé;
 
 public record Coin
 {
@@ -13,4 +15,32 @@ public record Coin
     }
 
     public ushort ValueInCents { get; }
+
+    public CoinCode GetCoinCode()
+    {
+        return ValueInCents switch
+        {
+            5 => CoinCode.FiveCents,
+            10 => CoinCode.TenCents,
+            20 => CoinCode.TwentyCents,
+            50 => CoinCode.FiftyCents,
+            100 => CoinCode.OneEuro,
+            200 => CoinCode.TwoEuros,
+            _ => throw new InvalidOperationException("Invalid coin value")
+        };
+    }
+
+    public ushort GetValue(CoinCode code)
+    {
+        return code switch
+        {
+            CoinCode.TwoEuros => 200,
+            CoinCode.OneEuro => 100,
+            CoinCode.FiftyCents => 50,
+            CoinCode.TwentyCents => 20,
+            CoinCode.TenCents => 10,
+            CoinCode.FiveCents => 5,
+            _ => 0
+        };
+    }
 }

@@ -11,15 +11,19 @@ internal class SoftwareMachineBuilder
 
     private ChangeMachineFake _changeMachineFake = new();
     private ChangeMachineSpy? _changeMachineSpy;
+    private Dictionary<CoinCode, ushort> _coinInMachine { get; set; } = new();
 
     // Retourne aussi le fake et le spy pour les tests qui en ont besoin.
-    public static (SoftwareMachineClass Instance, IBrewer Brewer, IChangeMachine ChangeMachine, ChangeMachineFake ChangeMachineFake, ChangeMachineSpy ChangeMachineSpy, BrewerSpy BrewerSpy)
+    public static (SoftwareMachineClass Instance, IBrewer Brewer, IChangeMachine ChangeMachine, ChangeMachineFake ChangeMachineFake, ChangeMachineSpy ChangeMachineSpy, BrewerSpy BrewerSpy, Dictionary<CoinCode, ushort> CoinInMachine)
         Default => new SoftwareMachineBuilder().Build();
 
-    public static (SoftwareMachineClass Instance, IBrewer Brewer, IChangeMachine ChangeMachine, ChangeMachineFake ChangeMachineFake, ChangeMachineSpy ChangeMachineSpy, BrewerSpy BrewerSpy)
+    public static (SoftwareMachineClass Instance, IBrewer Brewer, IChangeMachine ChangeMachine, ChangeMachineFake ChangeMachineFake, ChangeMachineSpy ChangeMachineSpy, BrewerSpy BrewerSpy, Dictionary<CoinCode, ushort> CoinInMachine)
         Defaillant => new SoftwareMachineBuilder().BuildDefaillant();
 
-    public (SoftwareMachineClass Instance, IBrewer Brewer, IChangeMachine ChangeMachine, ChangeMachineFake ChangeMachineFake, ChangeMachineSpy ChangeMachineSpy, BrewerSpy BrewerSpy) Build()
+    public static (SoftwareMachineClass Instance, IBrewer Brewer, IChangeMachine ChangeMachine, ChangeMachineFake ChangeMachineFake, ChangeMachineSpy ChangeMachineSpy, BrewerSpy BrewerSpy, Dictionary<CoinCode, ushort> CoinInMachine)
+        NoCoinInMachine => new SoftwareMachineBuilder().BuildNoCoin();
+
+    public (SoftwareMachineClass Instance, IBrewer Brewer, IChangeMachine ChangeMachine, ChangeMachineFake ChangeMachineFake, ChangeMachineSpy ChangeMachineSpy, BrewerSpy BrewerSpy, Dictionary<CoinCode, ushort> CoinInMachine) Build()
     {
         _changeMachineSpy ??= new ChangeMachineSpy(_changeMachineFake);
 
@@ -29,11 +33,21 @@ internal class SoftwareMachineBuilder
             _brewer = _brewerSpy;
         }
 
-        var instance = new SoftwareMachineClass(_brewer, _changeMachineSpy);
-        return (instance, _brewer, _changeMachineSpy, _changeMachineFake, _changeMachineSpy, _brewerSpy!);
+        _coinInMachine = new Dictionary<CoinCode, ushort>
+        {
+            { CoinCode.FiveCents, 10 },
+            { CoinCode.TenCents, 10 },
+            { CoinCode.TwentyCents, 10 },
+            { CoinCode.FiftyCents, 10 },
+            { CoinCode.OneEuro, 10 },
+            { CoinCode.TwoEuros, 10 }
+        };
+
+        var instance = new SoftwareMachineClass(_brewer, _changeMachineSpy, _coinInMachine);
+        return (instance, _brewer, _changeMachineSpy, _changeMachineFake, _changeMachineSpy, _brewerSpy!, _coinInMachine);
     }
 
-    public (SoftwareMachineClass Instance, IBrewer Brewer, IChangeMachine ChangeMachine, ChangeMachineFake ChangeMachineFake, ChangeMachineSpy ChangeMachineSpy, BrewerSpy BrewerSpy) BuildDefaillant()
+    public (SoftwareMachineClass Instance, IBrewer Brewer, IChangeMachine ChangeMachine, ChangeMachineFake ChangeMachineFake, ChangeMachineSpy ChangeMachineSpy, BrewerSpy BrewerSpy, Dictionary<CoinCode, ushort> CoinInMachine) BuildDefaillant()
     {
         _changeMachineSpy = new ChangeMachineSpy(_changeMachineFake);
 
@@ -43,7 +57,31 @@ internal class SoftwareMachineBuilder
             _brewer = new BrewerDummy();
         }
 
-        var instance = new SoftwareMachineClass(_brewer, _changeMachineSpy);
-        return (instance, _brewer, _changeMachineSpy, _changeMachineFake, _changeMachineSpy, _brewerSpy!);
+        var instance = new SoftwareMachineClass(_brewer, _changeMachineSpy, _coinInMachine);
+        return (instance, _brewer, _changeMachineSpy, _changeMachineFake, _changeMachineSpy, _brewerSpy!, _coinInMachine);
+    }
+
+    public (SoftwareMachineClass Instance, IBrewer Brewer, IChangeMachine ChangeMachine, ChangeMachineFake ChangeMachineFake, ChangeMachineSpy ChangeMachineSpy, BrewerSpy BrewerSpy, Dictionary<CoinCode, ushort> CoinInMachine) BuildNoCoin()
+    {
+        _changeMachineSpy ??= new ChangeMachineSpy(_changeMachineFake);
+
+        if (_brewerSpy is null)
+        {
+            _brewerSpy = new BrewerSpy(new BrewerStub());
+            _brewer = _brewerSpy;
+        }
+
+        _coinInMachine = new Dictionary<CoinCode, ushort>
+        {
+            { CoinCode.FiveCents, 0 },
+            { CoinCode.TenCents, 0 },
+            { CoinCode.TwentyCents, 0 },
+            { CoinCode.FiftyCents, 0 },
+            { CoinCode.OneEuro, 0 },
+            { CoinCode.TwoEuros, 0 }
+        };
+
+        var instance = new SoftwareMachineClass(_brewer, _changeMachineSpy, _coinInMachine);
+        return (instance, _brewer, _changeMachineSpy, _changeMachineFake, _changeMachineSpy, _brewerSpy!, _coinInMachine);
     }
 }

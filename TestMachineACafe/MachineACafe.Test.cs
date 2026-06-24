@@ -20,14 +20,17 @@ public class SoftwareMachineTest
         changeMachineSpy.AucuneAction();
     }
 
-    [Fact]
-    public void CasNominal()
+    [Theory]
+    [InlineData(CoinCode.FiftyCents)]
+    [InlineData(CoinCode.OneEuro)]
+    [InlineData(CoinCode.TwoEuros)]
+    public void CasNominal(CoinCode coin)
     {
         // ETANT DONNE une machine à café
         var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy) = LogicielMachineACafé.Default;
 
         // QUAND on insère une somme supérieure ou égale au prix d'un café
-        changeMachineFake.SimulerInsertionPièce(CoinCode.FiftyCents);
+        changeMachineFake.SimulerInsertionPièce(coin);
 
         // ALORS 1 café est servi
         brewerSpy.CafesServis(1);
@@ -49,14 +52,17 @@ public class SoftwareMachineTest
         changeMachineSpy.ArgentRestitué();
     }
 
-    [Fact]
-    public void PasAssezArgent()
+    [Theory]
+    [InlineData(CoinCode.FiveCents)]
+    [InlineData(CoinCode.TenCents)]
+    [InlineData(CoinCode.TwentyCents)]
+    public void PasAssezArgent(CoinCode coin)
     {
         // ETANT DONNE une machine à café
         var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy) = LogicielMachineACafé.Default;
 
         // QUAND on insère 1 pièce qui vaut moins que le prix d'un café
-        changeMachineFake.SimulerInsertionPièce(CoinCode.TwentyCents);
+        changeMachineFake.SimulerInsertionPièce(coin);
 
         // ALORS aucun café n'est servi
         brewerSpy.CafesServis(0);

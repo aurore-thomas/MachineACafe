@@ -72,81 +72,6 @@ public class SoftwareMachineTest
     }
 
     [Fact]
-    public void Cas1Café2Pièces()
-    {
-        // ETANT DONNE une machine à café
-        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy) = LogicielMachineACafé.Default;
-
-        // Quand on insère 2 pièces de 20 centimes
-        changeMachineFake.SimulerInsertionPièce(CoinCode.TwentyCents);
-        changeMachineFake.SimulerInsertionPièce(CoinCode.TwentyCents);
-
-        // ALORS MakeACoffee est appelé 1 fois sur le hardware
-        Assert.Equal(1, brewerSpy.MakeACoffeeInvocations);
-
-        // ET CollectStoredMoney est appelé 1 fois sur le hardware
-        Assert.Equal(1, changeMachineSpy.CollectStoredMoneyInvocations);
-
-        // ET FlushStoredMoney n'est pas appelé
-        Assert.Equal(0, changeMachineSpy.FlushStoredMoneyInvocations);
-    }
-
-    [Fact]
-    public void Cas1Café4Pièces()
-    {
-        // ETANT DONNE une machine à café
-        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy) = LogicielMachineACafé.Default;
-
-        // Quand on insère 4 pièces de 10 centimes
-        changeMachineFake.SimulerInsertionPièce(CoinCode.TenCents);
-        changeMachineFake.SimulerInsertionPièce(CoinCode.TenCents);
-        changeMachineFake.SimulerInsertionPièce(CoinCode.TenCents);
-        changeMachineFake.SimulerInsertionPièce(CoinCode.TenCents);
-
-        // ALORS un café est servi
-        brewerSpy.CafesServis(1);
-
-        // ET l'argent est encaissé
-        changeMachineSpy.ArgentEncaissé(1);
-    }
-
-    [Fact]
-    public void Cas2CafésPlusieursPièces()
-    {
-        // ETANT DONNE une machine à café
-        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy) = LogicielMachineACafé.Default;
-
-        // QUAND on insère 4 pièces de 20 centimes
-        changeMachineFake.SimulerInsertionPièce(CoinCode.TwentyCents);
-        changeMachineFake.SimulerInsertionPièce(CoinCode.TwentyCents);
-        changeMachineFake.SimulerInsertionPièce(CoinCode.TwentyCents);
-        changeMachineFake.SimulerInsertionPièce(CoinCode.TwentyCents);
-
-        // ALORS 2 cafés sont servis
-        brewerSpy.CafesServis(2);
-
-        // ET l'argent est encaissé 2 fois
-        changeMachineSpy.ArgentEncaissé(2);   
-    }
-
-    [Fact]
-    public void Cas2CafésAvec50Cts()
-    {
-        // ETANT DONNE une machine à café
-        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy) = LogicielMachineACafé.Default;
-
-        // Quand on insère 2 pièces de 50 centimes
-        changeMachineFake.SimulerInsertionPièce(CoinCode.FiftyCents);
-        changeMachineFake.SimulerInsertionPièce(CoinCode.FiftyCents);
-
-        // ALORS 2 cafés sont servis
-        brewerSpy.CafesServis(2);
-
-        // ET l'argent est encaissé 2 fois
-        changeMachineSpy.ArgentEncaissé(2);
-    }
-
-    [Fact]
     public void CasPasAssezArgentAvec5Pieces()
     {
         // ETANT DONNE une machine à café
@@ -199,4 +124,30 @@ public class SoftwareMachineTest
         // ET l'argent est encaissé
         changeMachineSpy.ArgentEncaissé(1);
     }
+    
+    [Theory]
+    [MemberData(nameof(CafesEtEncaissementData))]
+    public void CafesEtEncaissement(CoinCode[] coins, ushort cafesServis, ushort argentEncaissé)
+    {
+        // ETANT DONNE une machine à café
+        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy) = LogicielMachineACafé.Default;
+
+        // Pour chaque pièce insérée 
+        foreach (var coin in coins)
+            changeMachineFake.SimulerInsertionPièce(coin);
+
+        // ALORS Le café est servi n fois
+        brewerSpy.CafesServis(cafesServis);
+        
+        // ET l'argent est encaissé n fois 
+        changeMachineSpy.ArgentEncaissé(argentEncaissé);
+    }
+
+    public static IEnumerable<object[]> CafesEtEncaissementData =>
+    [
+        [new[] { CoinCode.TwentyCents, CoinCode.TwentyCents }, 1, 1],
+        [new[] { CoinCode.FiftyCents, CoinCode.FiftyCents }, 2, 2],
+        [new[] { CoinCode.TenCents, CoinCode.TenCents, CoinCode.TenCents, CoinCode.TenCents }, 1, 1],
+        [new[] { CoinCode.TwentyCents, CoinCode.TwentyCents, CoinCode.TwentyCents, CoinCode.TwentyCents }, 2, 2],
+    ];
 }

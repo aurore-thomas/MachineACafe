@@ -37,6 +37,8 @@ public class SoftwareMachineClass
         {
             _brewer.MakeACoffee();
             _changeMachine.CollectStoredMoney();
+
+
         }
         catch
         {

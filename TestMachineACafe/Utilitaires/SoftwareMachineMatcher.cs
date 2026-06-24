@@ -22,8 +22,12 @@ internal static class SoftwareMachineMatcher
     {
         Assert.Equal(nbEncaissement, changeMachineSpy.CollectStoredMoneyInvocations);
         Assert.Equal(0, changeMachineSpy.FlushStoredMoneyInvocations);
+    }
 
-
+    public static void ArgentEncaisséEtSurplusRendu(this ChangeMachineSpy changeMachineSpy, ushort nbEncaissement)
+    {
+        Assert.Equal(nbEncaissement, changeMachineSpy.CollectStoredMoneyInvocations);
+        Assert.Equal(1, changeMachineSpy.FlushStoredMoneyInvocations);
     }
 
     public static void ArgentEnAttente(this ChangeMachineSpy changeMachineSpy)

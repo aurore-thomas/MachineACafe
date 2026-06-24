@@ -35,8 +35,8 @@ public class SoftwareMachineTest
         // ALORS 1 café est servi
         brewerSpy.CafesServis(1);
 
-        // ET l'argent est encaissé
-        changeMachineSpy.ArgentEncaissé(1);
+        // ET l'argent est encaissé et le surplus d'argent est restitué
+        changeMachineSpy.ArgentEncaisséEtSurplusRendu(1);
     }
 
     [Fact]
@@ -70,6 +70,18 @@ public class SoftwareMachineTest
         // ET l'argent inséré n'est pas collecté ni rendu (le monnayeur attend d'autres pièces)
         changeMachineSpy.ArgentEnAttente();
     }
+
+    public void Cas1CafeTropArgent()
+    {
+        // ETANT DONNE une machine à café
+        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy) = LogicielMachineACafé.Default;
+        // QUAND on insère 1 pièce de 50 centimes
+        changeMachineFake.SimulerInsertionPièce(CoinCode.FiftyCents);
+        // ALORS un café est servi
+        brewerSpy.CafesServis(1);
+        // ET l'argent est encaissé
+        changeMachineSpy.ArgentEncaissé(1);
+    }   
 
     [Fact]
     public void Cas1Café2Pièces()

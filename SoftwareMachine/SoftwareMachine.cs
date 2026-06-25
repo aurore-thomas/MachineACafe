@@ -26,13 +26,12 @@ public class SoftwareMachineClass
         _valueCoinInMachine += somme.ValueInCents;
         _nbCoinInMachine++;
 
-        CoinCode coinCode = somme.GetCoinCode();
-
         if (_valueCoinInMachine < PRIX_CAFE)
         {
             if (_nbCoinInMachine == 5)
             {
                 _changeMachine.FlushStoredMoney();
+                _valueCoinInMachine = 0;
                 _nbCoinInMachine = 0;
             }
             return;
@@ -52,20 +51,22 @@ public class SoftwareMachineClass
                     .OrderByDescending(p => p.Valeur)
                     .ToList();
 
+                var stockTemp = new Dictionary<CoinCode, ushort>(_nbCoinInMachineByCoinCode);
+
                 foreach (var piece in piecesDisponiblesTriees)
                 {
-                    if (valueToReturn == 0) break;
-
-                    while (valueToReturn >= piece.Valeur && _nbCoinInMachineByCoinCode[piece.Code] > 0)
+                    while (valueToReturn >= piece.Valeur && stockTemp[piece.Code] > 0)
                     {
-                        _nbCoinInMachineByCoinCode[piece.Code]--;
+                        stockTemp[piece.Code]--;
                         valueToReturn -= piece.Valeur;
-
-                        _changeMachine.FlushStoredMoney();
                     }
                 }
 
-                //_changeMachine.FlushStoredMoney();
+                if (valueToReturn == 0)
+                {
+                    _nbCoinInMachineByCoinCode = stockTemp;
+                    _changeMachine.FlushStoredMoney();
+                }
             }
         }
         catch

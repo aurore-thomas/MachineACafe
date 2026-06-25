@@ -1,7 +1,6 @@
 ﻿using Hardware;
 using MachineACafé.Test.Utilities;
 using Xunit;
-using Assert = Xunit.Assert;
 using LogicielMachineACafé = MachineACafé.Test.Utilities.SoftwareMachineBuilder;
 
 namespace MachineACafé.Test;
@@ -128,6 +127,27 @@ public class SoftwareMachineTest
 
         // ET l'argent est encaissé ET il n'y a pas de surplus d'argent à rendre
         changeMachineSpy.ArgentEncaisséSansRendu(1);
+    }
+
+    [Theory]
+    [InlineData(CoinCode.TenCents, CoinCode.TenCents, CoinCode.TenCents, CoinCode.TwentyCents)]
+    [InlineData(CoinCode.TwentyCents, CoinCode.FiveCents, CoinCode.FiveCents, CoinCode.TwentyCents)]
+    public void Cas1Café4PiècesAvecRendu(CoinCode coin1, CoinCode coin2, CoinCode coin3, CoinCode coin4)
+    {
+        // ETANT DONNE une machine à café
+        var (_, brewer, changeMachine, changeMachineFake, changeMachineSpy, brewerSpy, coinInMachine) = LogicielMachineACafé.Default;
+
+        // Quand on insère 4 pièces de 10 centimes
+        changeMachineFake.SimulerInsertionPièce(coin1);
+        changeMachineFake.SimulerInsertionPièce(coin2);
+        changeMachineFake.SimulerInsertionPièce(coin3);
+        changeMachineFake.SimulerInsertionPièce(coin4);
+
+        // ALORS un café est servi
+        brewerSpy.CafesServis(1);
+
+        // ET l'argent est encaissé ET le surplus est rendu
+        changeMachineSpy.ArgentEncaisséEtSurplusRendu(1);
     }
 
     [Fact]
@@ -260,5 +280,35 @@ public class SoftwareMachineTest
 
         // ET le surplus d'argent n'est pas rendu (la machine ne peut pas rendre la monnaie)
         changeMachineSpy.ArgentEncaisséSansRendu(2);
+    }
+
+    [Fact]
+    public void CasRenduMonnaieImpossibleRendZeroEtSertCafe()
+    {
+        // ETANT DONNE une machine avec uniquement une pièce de 5cts 
+        var (_, _, _, changeMachineFake, changeMachineSpy, brewerSpy, _) = LogicielMachineACafé.UniquementCinqCents;
+
+        // QUAND on insère 50 centimes (10 cts à rendre)
+        changeMachineFake.SimulerInsertionPièce(CoinCode.FiftyCents);
+
+        // ALORS le café est quand même servi
+        brewerSpy.CafesServis(1);
+
+        // ET l'argent est encaissé, et la monnaie possible est rendue (5 centimes)
+        changeMachineSpy.ArgentEncaisséEtSurplusRendu(1);
+    }
+
+    [Fact]
+    public void CasRenduMonnaieAdapteUtilisePlusieursPetitesPieces()
+    {
+        // ETANT DONNE une machine avec uniquement des pièces de 5cts
+        var (_, _, _, changeMachineFake, changeMachineSpy, brewerSpy, coinInMachine) = LogicielMachineACafé.UniquementCinqCents;
+
+        // QUAND on insère 50 centimes (10 cts à rendre)
+        changeMachineFake.SimulerInsertionPièce(CoinCode.FiftyCents);
+
+        // ALORS le café est servi et le surplus est rendu (grâce aux deux pièces de 5cts)
+        brewerSpy.CafesServis(1);
+        changeMachineSpy.ArgentEncaisséEtSurplusRendu(1);
     }
 }

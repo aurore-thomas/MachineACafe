@@ -64,3 +64,39 @@
 * **Quand** on insère une pièce de 20 centimes et une pièce de 50 centimes
 * **Alors** un café est servi
 * **Et** l'argent est encaissé
+
+## Scénario : Cas 1 Café 2 Pièces Avec Rendu
+* **Étant donné** une machine à café
+* **Quand** on insère 2 pièces dont la somme est supérieure au prix d'un café
+* **Alors** 1 café est servi
+* **Et** l'argent est encaissé et le surplus est rendu
+
+## Scénario : Cas 1 Café 4 Pièces Avec Rendu
+* **Étant donné** une machine à café
+* **Quand** on insère 4 pièces dont la somme est supérieure au prix d'un café
+* **Alors** 1 café est servi
+* **Et** l'argent est encaissé et le surplus est rendu
+
+## Scénario : Cas Monnayeur Vide
+* **Étant donné** une machine à café avec un monnayeur vide (pas de monnaie pour rendre la différence)
+* **Quand** on insère une somme supérieure ou égale au prix d'un café
+* **Alors** 1 café est servi
+* **Et** l'argent est encaissé mais le surplus n'est pas rendu
+
+## Scénario : Cas Monnayeur Vide Avec Deux Pièces
+* **Étant donné** une machine à café avec un monnayeur vide (pas de monnaie pour rendre la différence)
+* **Quand** on insère 2 pièces chacune suffisante pour le prix d'un café
+* **Alors** 2 cafés sont servis
+* **Et** l'argent est encaissé 2 fois mais le surplus n'est pas rendu
+
+## Scénario : Cas Rendu Monnaie Impossible Rend Zéro Et Sert Café
+* **Étant donné** une machine à café avec uniquement des pièces de 5 centimes
+* **Quand** on insère 50 centimes (10 centimes à rendre)
+* **Alors** 1 café est servi
+* **Et** l'argent est encaissé et la monnaie possible est rendue (5 centimes)
+
+## Scénario : Cas Rendu Monnaie Adaptée Utilise Plusieurs Petites Pièces
+* **Étant donné** une machine à café avec uniquement des pièces de 5 centimes
+* **Quand** on insère 50 centimes (10 centimes à rendre)
+* **Alors** 1 café est servi
+* **Et** l'argent est encaissé et le surplus est rendu (2 pièces de 5 centimes)
